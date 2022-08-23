@@ -28,7 +28,6 @@ export default class ClassComponentExample extends React.Component<IProps, IStat
     changeIgnoreProp = ()=> this.setState({ignoreProp:Math.random()})
 
     toggleCountMounted(){
-        // this.state = {...this.state, countMounted: !this.state.countMounted}
         this.setState(prev=>({countMounted:!prev.countMounted}))
     }
 
@@ -42,9 +41,8 @@ export default class ClassComponentExample extends React.Component<IProps, IStat
                 <button onClick={this.changeIgnoreProp}>ChangeIgnoreProp</button>
                 <button onClick={this.generateSeed}>Generate seed</button>
                 <button onClick={this.toggleErrorComponent}>Toggle error component</button>
-                {
-                    this.state.countMounted ? <ClassComponent showErrorComponent={this.state.showErrorComponent} ignoreProp={this.state.ignoreProp} seed={this.state.seed}/> : null
-                }
+                {this.state.countMounted && <ClassComponent showErrorComponent={this.state.showErrorComponent} ignoreProp={this.state.ignoreProp} seed={this.state.seed}/>}
+
             </>
         )
     }

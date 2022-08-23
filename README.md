@@ -24,13 +24,20 @@
 1. static getDerivedStateFromError(error:any):IState | null
 2. componentDidCatch(error: Error, errorInfo: React.ErrorInfo)
 
-Методы обработок ошибок у меня не сработали, вместо них следует использовать границы ошибок.
+Метод getDerivedStateFromError также экономит цикл рендеринга при возникновении ошибки (потому что он выполняется до рендирга, а DidCatch после)
+В методе getDerivedStateFromError рекомендуется активировать аварийный интерфейс
+В методе componentDidCatch логировать ошибку
+
+Если компонент реализует методы getDerivedStateFromError и/или componentDidCatch, то он является границей ошибок.
+Возможно реализация границ ошибок (компонентов которое показывают аварийный интерфейс) один из немногих случаев, когда следует использовать классовый компонент вместо функционального.
+
+
 В функциональных компонентах методов жизненного цикла нет.
 Аналогом render является всё тело функционального компонента.
 useEffect заменяет componentDidMount, componentDidUpdate, componentWillUnmount
 useMemo и useCallback заменяют shouldComponentUpdate
 Для обработки ошибок есть границы ошибок.
 
-useEffectLayout может заменить getSnapshotBeforeUpdate (прямого аналога в FC нет)
+useEffectLayout может заменить getSnapshotBeforeUpdate и getDerivedStateFromProps (прямого аналога в FC нет)
 getDerivedStateFromProps является избыточным, но может сохранить цикл рендеринга, заранее изменив state, нет аналогов в FC
 getSnapshotBeforeUpdate запускается до обновления, componentDidUpdate после

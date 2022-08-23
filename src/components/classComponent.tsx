@@ -1,4 +1,4 @@
-import React, {FC, useEffect} from "react";
+import React, {FC} from "react";
 
 interface IProps{
     ignoreProp:number
@@ -25,6 +25,8 @@ seed:0,
 
         }
     }
+    increment = () => this.setState(prev=>({counter: prev.counter + 1}))
+    decrement = () => this.setState(prev=>({counter: prev.counter - 1}))
 
     static getDerivedStateFromProps(props:IProps, state:IState):IState | null{
         console.log('getDerivedStateFromProps')
@@ -42,8 +44,7 @@ seed:0,
         return null
     }
 
-    increment = () => this.setState(prev=>({counter: prev.counter + 1}))
-    decrement = () => this.setState(prev=>({counter: prev.counter - 1}))
+
 
     componentDidMount() {
         console.log('Component Did Mount')
@@ -59,15 +60,15 @@ seed:0,
         console.log('Render')
 
         if (this.state.counter === 41) {
-            // Simulate a JS error
+            // ошибки в самой границы ошибок не отлавливаются
             throw new Error('I crashed!');
         }
 
-        if (this.state.error){
+        if (this.state.error && this.props.showErrorComponent){
             return (
                 <>
                     <div>We have error: {this.state.error.message}</div>
-                    {this.state.errorInfo}
+
                 </>
             )
         }
@@ -114,19 +115,24 @@ seed:0,
         console.log(snapshot)
     }
     static getDerivedStateFromError(error:any) {
+        console.log("getDerivedStateFromError")
+        console.log('--------------------')
         // Update state so the next render will show the fallback UI.
-        return { hasError: true };
+        return { error: error };
+        // return {}
     }
 
     componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
         console.log("Component Did Catch")
         console.log('--------------------')
-        this.setState({error, errorInfo})
+        // this.setState({error:new Error('dfg'),errorInfo})
+        //логирование ошибки
+        console.log(errorInfo)
     }
 }
 
 export const ErrorComponent:FC<any> = (props)=>{
 
-    props.id = 0
+    throw new Error('abdc')
     return (<>{[1,2,3].map(el=><div>{props.id}</div>)}</>)
 }
